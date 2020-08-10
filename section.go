@@ -10,6 +10,7 @@ var CLI struct {
 	Login   commands.LoginCmd   `cmd help:"Authenticate to Section's API."`
 	Apps    commands.AppsCmd    `cmd help:"Manage apps on Section"`
 	Deploy  commands.DeployCmd  `cmd help:"Deploy an app to Section"`
+	Logs    commands.LogsCmd    `cmd help:"Tail an application's logs"`
 	Version commands.VersionCmd `cmd help:"Print section-cli version"`
 }
 
