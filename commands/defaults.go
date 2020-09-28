@@ -13,6 +13,18 @@ import (
 	"github.com/alecthomas/kong"
 )
 
+var (
+	defaultsPath string
+)
+
+func init() {
+	usr, err := user.Current()
+	if err != nil {
+		return
+	}
+	defaultsPath = filepath.Join(usr.HomeDir, ".config", "section", "defaults.json")
+}
+
 // DefaultsCmd handles setting defaults for the command line
 type DefaultsCmd struct {
 	Set  DefaultsSetCommand  `cmd help:"Set a default"`
@@ -32,12 +44,6 @@ type DefaultsListCommand struct{}
 
 // Run executes the command
 func (c *DefaultsListCommand) Run() (err error) {
-	usr, err := user.Current()
-	if err != nil {
-		return err
-	}
-	defaultsPath := filepath.Join(usr.HomeDir, ".config", "section", "defaults.json")
-
 	def, err := readDefaults(defaultsPath)
 	if err != nil {
 		return err
@@ -98,11 +104,6 @@ type defaults struct {
 // DefaultAccountIDResolver looks up a default Section account id
 var DefaultAccountIDResolver kong.ResolverFunc = func(context *kong.Context, parent *kong.Path, flag *kong.Flag) (interface{}, error) {
 	if flag.Name == "account-id" {
-		usr, err := user.Current()
-		if err != nil {
-			return nil, nil
-		}
-		defaultsPath := filepath.Join(usr.HomeDir, ".config", "section", "defaults.json")
 		def, err := readDefaults(defaultsPath)
 		if err != nil {
 			return nil, nil
