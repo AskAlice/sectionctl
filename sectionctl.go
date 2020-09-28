@@ -17,6 +17,7 @@ var CLI struct {
 	Accounts         commands.AccountsCmd `cmd help:"Manage accounts on Section"`
 	Apps             commands.AppsCmd     `cmd help:"Manage apps on Section"`
 	Deploy           commands.DeployCmd   `cmd help:"Deploy an app to Section"`
+	Defaults         commands.DefaultsCmd `cmd help:"List and set sectionctl defaults"`
 	Version          commands.VersionCmd  `cmd help:"Print sectionctl version"`
 	SectionAPIPrefix *url.URL             `default:"https://aperture.section.io" env:"SECTION_API_PREFIX"`
 }
@@ -26,6 +27,7 @@ func main() {
 		kong.Description("CLI to interact with Section."),
 		kong.UsageOnError(),
 		kong.ConfigureHelp(kong.HelpOptions{Tree: true}),
+		kong.Resolvers(commands.DefaultAccountIDResolver),
 	)
 	api.PrefixURI = CLI.SectionAPIPrefix
 	analytics.LogInvoke(ctx)
